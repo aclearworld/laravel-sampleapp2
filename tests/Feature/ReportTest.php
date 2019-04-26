@@ -72,7 +72,7 @@ class ReportTest extends TestCase
         $params = [
             'name' => '顧客名1',
         ];
-        $response = $this->postJson('api/customers',$params);
+        $response = $this->postJson('api/customers', $params);
         $response->assertStatus(200);
     }
 
@@ -85,8 +85,8 @@ class ReportTest extends TestCase
         $params = [
             'name' => '顧客名2',
         ];
-        $this->postJson('api/customers',$params);
-        $this->assertDatabaseHas('customers',$params);
+        $this->postJson('api/customers', $params);
+        $this->assertDatabaseHas('customers', $params);
     }
 
     /**
@@ -96,7 +96,7 @@ class ReportTest extends TestCase
     public function api_customersにnameが含まれない場合、422UnprocessableEntityが返却される()
     {
         $params = [];
-        $response = $this->postJson('api/customers',$params);
+        $response = $this->postJson('api/customers', $params);
         $response->assertStatus(\Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
@@ -107,8 +107,28 @@ class ReportTest extends TestCase
     public function api_customersにnameが空の場合、422UnprocessableEntityが返却される()
     {
         $params = ['name' => ''];
-        $response = $this->postJson('api/customers',$params);
+        $response = $this->postJson('api/customers', $params);
         $response->assertStatus(\Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+
+    /**
+     * @test
+     * @return void
+     */
+    public function POST_api_customersのエラーレスポンスの確認()
+    {
+        $params = ['name' => ''];
+        $response = $this->postJson('api/customers', $params);
+
+        $error_response = [
+            'message' => "The given data was invalid.",
+            'errors' => [
+                'name' => ["name は必須項目です"]
+            ]
+        ];
+
+        $response->assertExactJson($error_response);
     }
 
     /**
