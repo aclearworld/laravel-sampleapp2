@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ReportService;
 use Illuminate\Http\Response;
 use App\Customer;
 use App\Services\CustomerService;
@@ -72,8 +73,9 @@ class ApiController extends Controller
         $customerService->deleteCustomer($customer_id);
     }
 
-    public function getReports()
+    public function getReports(ReportService $reportService)
     {
+        return response()->json($reportService->getReports());
     }
 
     public function postReport()
