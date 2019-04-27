@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CustomerService;
 use Illuminate\Http\Request;
 
 /**
@@ -11,23 +12,24 @@ use Illuminate\Http\Request;
 class ApiController extends Controller
 {
     /**
-     * @return \Illuminate\Http\JsonResponse id name
+     * @param CustomerService $customerService
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function getCustomers()
+    public function getCustomers(CustomerService $customerService)
     {
-        return response()->json(\App\Customer::query()->select(['id', 'name'])->get());
+        return response()->json($customerService->getCustomers());
     }
 
     /**
+     * 失敗時 422を返す
+     *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse 失敗時 422を返す
+     * @param CustomerService $customerService
      */
-    public function postCustomers(Request $request)
+    public function postCustomers(Request $request,CustomerService $customerService)
     {
         $this->validate($request, ['name' => 'required']);
-        $customer = new \App\Customer();
-        $customer->name = $request->json('name');
-        $customer->save();
+        $customerService->addCustomer($request->json('name'));
     }
 
     public function getCustomer()
