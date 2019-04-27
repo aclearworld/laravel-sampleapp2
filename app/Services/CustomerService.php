@@ -25,7 +25,7 @@ class  CustomerService
     public function addCustomer(String $name)
     {
         $customer = new Customer();
-        $customer->name = $name;
+        $customer->name = trim($name);
         $customer->save();
     }
 

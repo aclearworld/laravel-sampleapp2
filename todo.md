@@ -20,6 +20,10 @@
 - customer_idに紐づいて、訪問記録を削除できる
   - Route::delete('reports/{report_id}', 'ApiController@deleteReport');
 
+### その他
+- react
+- trim
+- max
   
   
   

@@ -26,7 +26,7 @@
     @endif
 
     <!-- Reactエントリーポイント-->
-    <div id="example"></div>
+    <div id="root"></div>
 
 </main>
 <script src="{{  asset('js/app.js')  }}"></script>
