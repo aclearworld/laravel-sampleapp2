@@ -290,6 +290,8 @@ class ReportTest extends TestCase
     public function api_customers_customer_idにDELETEメソッドでアクセスできる()
     {
         $customer_id = $this->getFirstCustomerId();
+        //訪問記録を削除
+        Report::query()->where('customer_id', '=', $customer_id)->delete();
         $response = $this->delete('api/customers/' . $customer_id);
         $response->assertStatus(200);
     }
@@ -336,7 +338,7 @@ class ReportTest extends TestCase
         //訪問記録を削除
         Report::query()->where('customer_id', '=', $customer_id)->delete();
         $this->delete('api/customers/' . $customer_id);
-        $this->assertDatabaseMissing('customers',['id' => $customer_id]);
+        $this->assertDatabaseMissing('customers', ['id' => $customer_id]);
     }
 
     /**

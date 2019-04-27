@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Customer;
+use App\Report;
 use Illuminate\Support\Facades\Log;
 
 class  CustomerService
@@ -62,5 +63,24 @@ class  CustomerService
         $customer = Customer::find($id);
         $customer->name = $name;
         $customer->save();
+    }
+
+    /**
+     * 指定したidに紐づく顧客が、1件以上レポートを持っているか
+     * @param int $id
+     * @return bool
+     */
+    public function hasReports(int $id)
+    {
+        return Report::query()->where('customer_id', '=', $id)->exists();
+    }
+
+    /**
+     * @param int $id
+     * @throws \Exception
+     */
+    public function deleteCustomer(int $id)
+    {
+        Customer::find($id)->delete();
     }
 }

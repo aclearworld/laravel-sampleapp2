@@ -44,12 +44,7 @@ class ApiController extends Controller
      */
     public function getCustomer($customer_id, CustomerService $customerService)
     {
-        if (!is_numeric($customer_id)) {
-            abort(Response::HTTP_NOT_FOUND);
-        }
-        if (!$customerService->existCustomer($customer_id)) {
-            abort(Response::HTTP_NOT_FOUND);
-        }
+        $this->validationCustomerId($customer_id, $customerService);
         return response()->json($customerService->getCustomer($customer_id));
     }
 
@@ -61,18 +56,20 @@ class ApiController extends Controller
      */
     public function putCustomer(Request $request, $customer_id, CustomerService $customerService)
     {
-        if (!is_numeric($customer_id)) {
-            abort(Response::HTTP_NOT_FOUND);
-        }
-        if (!$customerService->existCustomer($customer_id)) {
-            abort(Response::HTTP_NOT_FOUND);
-        }
+        $this->validationCustomerId($customer_id, $customerService);
         $this->validate($request, ['name' => 'required']);
-        $customerService->updateName($customer_id,$request->json('name'));
+        $customerService->updateName($customer_id, $request->json('name'));
     }
 
-    public function deleteCustomer()
+    public function deleteCustomer($customer_id, CustomerService $customerService)
     {
+        $this->validationCustomerId($customer_id, $customerService);
+        if ($customerService->hasReports($customer_id)  ){
+            //訪問記録を持つ顧客情報は削除不可
+            abort(Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        //削除
+        $customerService->deleteCustomer($customer_id);
     }
 
     public function getReports()
@@ -93,5 +90,22 @@ class ApiController extends Controller
 
     public function deleteReport()
     {
+    }
+
+    /**
+     * 顧客IDが正しいものかチェック
+     *    存在する顧客である  IDを数値として扱えるものである
+     *    正しくない場合 404をクライアントに返す
+     * @param $customer_id
+     * @param CustomerService $customerService
+     */
+    private function validationCustomerId($customer_id, CustomerService $customerService)
+    {
+        if (!is_numeric($customer_id)) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+        if (!$customerService->existCustomer($customer_id)) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
     }
 }
