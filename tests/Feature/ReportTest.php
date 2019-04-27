@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Customer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Log;
 
 class ReportTest extends TestCase
 {
@@ -137,8 +138,42 @@ class ReportTest extends TestCase
      */
     public function api_customers_customer_idにGETメソッドでアクセスできる()
     {
-        $response = $this->get('api/customers/1');
+        $customer_id = $this->getFirstCustomerId();
+        $response = $this->get('api/customers/' . $customer_id);
         $response->assertStatus(200);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにGETメソッドでアクセスするとJSONが返却される()
+    {
+        $customer_id = $this->getFirstCustomerId();
+        $response = $this->get('api/customers/' . $customer_id);
+        $this->assertThat($response->content(), $this->isJson());
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにGETメソッドで取得できる顧客情報のJSON形式は要件通りである()
+    {
+        $customer_id = $this->getFirstCustomerId();
+        $response = $this->get('api/customers/' . $customer_id);
+        $customer = $response->json();
+        $this->assertSame(['id', 'name'], array_keys($customer));
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idに存在しないcustomer_idを渡すと、404NotFoundを返す()
+    {
+        $response = $this->get('api/customers/9999');
+        $response->assertStatus(404);
     }
 
     /**
@@ -209,5 +244,10 @@ class ReportTest extends TestCase
     {
         $response = $this->delete('api/reports/1');
         $response->assertStatus(200);
+    }
+
+    private function getFirstCustomerId()
+    {
+        return Customer::query()->first()->value('id');
     }
 }
