@@ -3,9 +3,9 @@
 #### 顧客情報
 - [x] customer_idに紐づいて、顧客情報が取得できる
   - Route::get('customers/{customer_id}','ApiController@getCustomer');
- - customer_idに紐づいて、顧客情報が更新できる
+ - [x] customer_idに紐づいて、顧客情報が更新できる
    - Route::put('customers/{customer_id}','ApiController@putCustomer');
-- customer_idに紐づいて、顧客情報を削除できる
+- customer_idに紐づいて、顧客情報を削除できる(訪問記録を持つ顧客は削除できない)
   - Route::delete('customers/{customer_id}', 'ApiController@deleteCustomer');
 
 #### 訪問記録

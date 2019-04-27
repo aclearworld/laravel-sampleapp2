@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 use App\Customer;
+use App\Report;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Log;
 
@@ -288,8 +289,54 @@ class ReportTest extends TestCase
      */
     public function api_customers_customer_idにDELETEメソッドでアクセスできる()
     {
-        $response = $this->delete('api/customers/1');
+        $customer_id = $this->getFirstCustomerId();
+        $response = $this->delete('api/customers/' . $customer_id);
         $response->assertStatus(200);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにDELETEメソッドで存在しないcustomer_idを渡すと、404NotFoundを返す()
+    {
+        $response = $this->delete('api/customers/9999');
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにDELETEメソッドでcustomer_idに数値以外を渡すと、404NotFoundを返す()
+    {
+        $response = $this->delete('api/customers/String');
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにDELETEメソッドで訪問記録がある顧客情報を削除しようとした場合、422を返す()
+    {
+        $customer_id = $this->getFirstCustomerId();
+        $response = $this->delete('api/customers/' . $customer_id);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにDELETEメソッドで訪問記録がない顧客情報が削除できる()
+    {
+        $customer_id = $this->getFirstCustomerId();
+
+        //訪問記録を削除
+        Report::query()->where('customer_id', '=', $customer_id)->delete();
+        $this->delete('api/customers/' . $customer_id);
+        $this->assertDatabaseMissing('customers',['id' => $customer_id]);
     }
 
     /**
