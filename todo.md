@@ -1,7 +1,7 @@
 ### todo
 
 #### 顧客情報
-- customer_idに紐づいて、顧客情報が取得できる
+- [x] customer_idに紐づいて、顧客情報が取得できる
   - Route::get('customers/{customer_id}','ApiController@getCustomer');
  - customer_idに紐づいて、顧客情報が更新できる
    - Route::put('customers/{customer_id}','ApiController@putCustomer');

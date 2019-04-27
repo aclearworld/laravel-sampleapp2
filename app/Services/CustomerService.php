@@ -51,4 +51,16 @@ class  CustomerService
             ->where('id', '=', $id)
             ->exists();
     }
+
+    /**
+     * 指定したidに紐づく顧客の名前を変更する
+     * @param int $id
+     * @param string $name
+     */
+    public function updateName(int $id, string $name)
+    {
+        $customer = Customer::find($id);
+        $customer->name = $name;
+        $customer->save();
+    }
 }

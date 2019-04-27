@@ -24,6 +24,7 @@ class ApiController extends Controller
     }
 
     /**
+     * 顧客登録
      * 失敗時 422を返す
      *
      * @param Request $request
@@ -37,20 +38,37 @@ class ApiController extends Controller
 
     /**
      * customer_idに紐づいく顧客情報を1つ取得
-     * @param int $customer_id
+     * @param $customer_id
      * @param CustomerService $customerService
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCustomer(int $customer_id, CustomerService $customerService)
+    public function getCustomer($customer_id, CustomerService $customerService)
     {
+        if (!is_numeric($customer_id)) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
         if (!$customerService->existCustomer($customer_id)) {
             abort(Response::HTTP_NOT_FOUND);
         }
         return response()->json($customerService->getCustomer($customer_id));
     }
 
-    public function putCustomer()
+    /**
+     * 顧客名更新
+     * @param Request $request
+     * @param $customer_id
+     * @param CustomerService $customerService
+     */
+    public function putCustomer(Request $request, $customer_id, CustomerService $customerService)
     {
+        if (!is_numeric($customer_id)) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+        if (!$customerService->existCustomer($customer_id)) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+        $this->validate($request, ['name' => 'required']);
+        $customerService->updateName($customer_id,$request->json('name'));
     }
 
     public function deleteCustomer()

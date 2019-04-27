@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Http\Response;
 use Tests\TestCase;
 use App\Customer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -98,7 +99,7 @@ class ReportTest extends TestCase
     {
         $params = [];
         $response = $this->postJson('api/customers', $params);
-        $response->assertStatus(\Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -109,9 +110,8 @@ class ReportTest extends TestCase
     {
         $params = ['name' => ''];
         $response = $this->postJson('api/customers', $params);
-        $response->assertStatus(\Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
-
 
     /**
      * @test
@@ -170,10 +170,20 @@ class ReportTest extends TestCase
      * @test
      * @return void
      */
-    public function api_customers_customer_idに存在しないcustomer_idを渡すと、404NotFoundを返す()
+    public function api_customers_customer_idにGETメソッドで存在しないcustomer_idを渡すと、404NotFoundを返す()
     {
         $response = $this->get('api/customers/9999');
-        $response->assertStatus(404);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにGETメソッドでcustomer_idに数値以外を渡すと、404NotFoundを返す()
+    {
+        $response = $this->get('api/customers/String');
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -182,8 +192,94 @@ class ReportTest extends TestCase
      */
     public function api_customers_customer_idにPUTメソッドでアクセスできる()
     {
-        $response = $this->put('api/customers/1');
+        $customer_id = $this->getFirstCustomerId();
+        $response = $this->putJson('api/customers/' . $customer_id, ['name' => 'name']);
         $response->assertStatus(200);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにPUTメソッドで存在しないcustomer_idを渡すと、404NotFoundを返す()
+    {
+        $response = $this->putJson('api/customers/9999', ['name' => 'name']);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにPUTメソッドでcustomer_idに数値以外を渡すと、404NotFoundを返す()
+    {
+        $response = $this->putJson('api/customers/String', ['name' => 'name']);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにPUTメソッドで、顧客名が編集できる()
+    {
+        //顧客を一つ取得し、名前を変更したデータを用意
+        $customer_id = $this->getFirstCustomerId();
+        $response = $this->get('api/customers/' . $customer_id);
+        $customer = $response->json();
+        $newName = $customer['name'] . '_new';
+        $params = [
+            'name' => $newName,
+        ];
+
+        //put
+        $this->putJson('api/customers/' . $customer_id, $params);
+
+        //確認
+        $response = $this->get('api/customers/' . $customer_id);
+        $customer = $response->json();
+        $this->assertSame($newName, $customer['name']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにPUTメソッドで、nameが空のJSONを渡した場合、422UnprocessableEntityが返却される()
+    {
+        $customer_id = $this->getFirstCustomerId();
+        $response = $this->putJson('api/customers/' . $customer_id, ['name' => '']);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにPUTメソッドで、空のJSONを渡した場合、422UnprocessableEntityが返却される()
+    {
+        $customer_id = $this->getFirstCustomerId();
+        $response = $this->putJson('api/customers/' . $customer_id, []);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function PUTapi_customers_customer_idのエラーレスポンスの確認()
+    {
+        $customer_id = $this->getFirstCustomerId();
+        $response = $this->putJson('api/customers/' . $customer_id, []);
+
+        $error_response = [
+            'message' => "The given data was invalid.",
+            'errors' => [
+                'name' => ["name は必須項目です"]
+            ]
+        ];
+
+        $response->assertExactJson($error_response);
     }
 
     /**
