@@ -73,6 +73,10 @@ class ApiController extends Controller
         $customerService->deleteCustomer($customer_id);
     }
 
+    /**
+     * @param ReportService $reportService
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getReports(ReportService $reportService)
     {
         return response()->json($reportService->getReports());

@@ -9,7 +9,7 @@
   - Route::delete('customers/{customer_id}', 'ApiController@deleteCustomer');
 
 #### 訪問記録
-- 全訪問記録が取得できる
+- [x] 全訪問記録が取得できる
   - Route::get('reports', 'ApiController@getReports');
 - 全訪問記録を新規に作成できる
   - Route::post('reports', 'ApiController@postReport');
