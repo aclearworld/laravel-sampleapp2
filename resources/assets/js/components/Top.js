@@ -9,9 +9,9 @@ import teal from '@material-ui/core/colors/teal'
 import Button from '@material-ui/core/Button';
 
 const cyan100 = cyan['600'];
-const teal200 = cyan['200'];
+const teal200 = teal['200'];
 
-const styles = {
+const styles = theme => ({
     root: {
         flexGrow: 1,
     },
@@ -25,19 +25,20 @@ const styles = {
     },
     button: {
         fontSize: '20px',
-        margin: 'auto',
-        marginTop: '20px',
+        margin: theme.spacing.unit,
     },
-    mainContentWrap: {
-        display: 'flex',
+    mainContent: {
         height: '80%',
         width: '100%',
     },
-    mainContent: {
-        height: '100%',
+    footer: {
+        height: '10%',
         width: '100%',
-    }
-};
+        backgroundColor: teal200,
+        display: 'flex',
+        justifyContent: 'center',
+    },
+});
 
 class Top extends Component {
     constructor(props) {
@@ -57,14 +58,24 @@ class Top extends Component {
                 </AppBar>
 
                 <div className={classes.mainContentWrap}>
+                    <ul>
+                        <li>test</li>
+                        <li>testttet</li>
+                        <li>tewtetwet</li>
+                        <li>tewtetwet</li>
+                        <li>testttet</li>
+                    </ul>
+                </div>
 
+                <footer className={classes.footer}>
                     <Button variant="contained" color="secondary" className={classes.button}>
                         新規訪問記録作成
                     </Button>
                     <Button variant="contained" color="secondary" className={classes.button}>
                         顧客一覧
                     </Button>
-                </div>
+                </footer>
+
             </div>
         );
     };
