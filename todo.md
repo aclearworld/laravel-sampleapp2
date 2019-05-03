@@ -11,7 +11,7 @@
 #### 訪問記録
 - [x] 全訪問記録が取得できる
   - Route::get('reports', 'ApiController@getReports');
-- 全訪問記録を新規に作成できる
+- 訪問記録を新規に作成できる
   - Route::post('reports', 'ApiController@postReport');
 - report_idに紐づいて、訪問記録を取得できる
   -   Route::get('reports/{}', 'ApiController@getReport');
