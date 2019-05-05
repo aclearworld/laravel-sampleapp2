@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import cyan from '@material-ui/core/colors/cyan';
 import teal from '@material-ui/core/colors/teal'
 import Button from '@material-ui/core/Button';
+import _ from 'lodash';
 
 const cyan100 = cyan['600'];
 const teal200 = teal['200'];
@@ -46,14 +47,20 @@ class Top extends Component {
     }
 
     componentDidMount() {
-        const getReports = this.props.getReports;
-        console.log(getReports);
+        const {getReports, getCustomers} = this.props;
         getReports();
+        getCustomers();
     }
 
     render() {
-        const {classes, reports} = this.props;
+        const {classes, reports, customers} = this.props;
         console.log(reports);
+        console.log(customers);
+        // if (reports.length !== 0 && customers.length !== 0) {
+        //     _.sortBy(reports, [(report) => report.visit_date]);
+        // }
+        // console.log('------------------');
+        // console.log(reports);
 
         return (
             <div className={classes.root}>

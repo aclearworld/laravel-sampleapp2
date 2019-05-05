@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-const getReportsApi = () => {
+export const getReportsApi = () => {
     return axios.get('/api/reports');
 };
 
-export default getReportsApi;
+export const getCustomersApi = () => {
+    return axios.get('/api/customers');
+};

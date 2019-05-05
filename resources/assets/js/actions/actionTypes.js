@@ -1,3 +1,4 @@
 export const actionTypes = {
     RECEIVE_REPORTS: 'RECEIVE_REPORTS',
+    RECEIVE_CUSTOMERS: 'RECEIVE_CUSTOMERS',
 };
