@@ -45,8 +45,16 @@ class Top extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        const getReports = this.props.getReports;
+        console.log(getReports);
+        getReports();
+    }
+
     render() {
-        const {classes} = this.props;
+        const {classes, reports} = this.props;
+        console.log(reports);
+
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.header}>
@@ -57,13 +65,11 @@ class Top extends Component {
                     </Toolbar>
                 </AppBar>
 
-                <div className={classes.mainContentWrap}>
+                <div className={classes.mainContent}>
                     <ul>
-                        <li>test</li>
-                        <li>testttet</li>
-                        <li>tewtetwet</li>
-                        <li>tewtetwet</li>
-                        <li>testttet</li>
+                        {reports.map(report => (
+                            <li key={report.id}>{report.detail}</li>
+                        ))}
                     </ul>
                 </div>
 
@@ -75,7 +81,6 @@ class Top extends Component {
                         顧客一覧
                     </Button>
                 </footer>
-
             </div>
         );
     };

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Link, withRouter, Redirect, Route, Switch} from "react-router-dom";
-import Top from "./components/Top";
+import Top from "./containers/Top";
 
 class Application extends Component {
     render() {
