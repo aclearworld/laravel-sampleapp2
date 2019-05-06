@@ -7,7 +7,6 @@ import cyan from '@material-ui/core/colors/cyan';
 import teal from '@material-ui/core/colors/teal'
 import grey from '@material-ui/core/colors/grey'
 import Button from '@material-ui/core/Button';
-// import _ from 'lodash';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -69,6 +68,12 @@ class Top extends Component {
         getCustomers();
     }
 
+    handleCustomerList(e) {
+        e.preventDefault();
+        const {history} = this.props;
+        history.push('/customerList');
+    };
+
     /**
      *  表示用にエンティティを整形
      * @param reports
@@ -107,8 +112,6 @@ class Top extends Component {
         const {classes, reports, customers} = this.props;
         const displayItems = this.CreateDisplayItem(reports, customers);
 
-        console.log(displayItems);
-
         return (
             <div className={classes.root}>
                 <AppBar position="static" className={classes.header}>
@@ -135,14 +138,14 @@ class Top extends Component {
                             ))}
                         </List>
                     ))}
-
                 </div>
 
                 <footer className={classes.footer}>
                     <Button variant="contained" color="secondary" className={classes.button}>
                         新規訪問記録作成
                     </Button>
-                    <Button variant="contained" color="secondary" className={classes.button}>
+                    <Button variant="contained" color="secondary" className={classes.button}
+                            onClick={e => this.handleCustomerList(e)}>
                         顧客一覧
                     </Button>
                 </footer>
