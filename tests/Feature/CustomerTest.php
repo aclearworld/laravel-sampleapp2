@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Services\UtilityService;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 use App\Customer;
@@ -90,6 +91,29 @@ class CustomerTest extends TestCase
         ];
         $this->postJson('api/customers', $params);
         $this->assertDatabaseHas('customers', $params);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customersに顧客名をPOSTするとcustomersテーブルに追加されるデータは、トリム処理がされている()
+    {
+        $utilityService = $this->app->make('App\Services\UtilityService');
+
+        $customerName = ' 　顧客名3　 ';
+        $params = [
+            'name' => $customerName,
+        ];
+        $this->postJson('api/customers', $params);
+
+        //トリム処理
+        $customerName = $utilityService->mb_trim($customerName);
+        $params = [
+            'name' => $customerName,
+        ];
+        $this->assertDatabaseHas('customers', $params);
+
     }
 
     /**
