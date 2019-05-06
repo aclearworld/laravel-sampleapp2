@@ -95,25 +95,27 @@ class CustomerTest extends TestCase
 
     /**
      * @test
-     * @return void
+     * @dataProvider providerIncludeSpaceNames
+     * @param $name
+     * @param $expected
      */
-    public function api_customersに顧客名をPOSTするとcustomersテーブルに追加されるデータは、トリム処理がされている()
+    public function api_customersに顧客名をPOSTするとcustomersテーブルに追加されるデータは、トリム処理がされている(
+        $name, $expected)
     {
-        $utilityService = $this->app->make('App\Services\UtilityService');
+//        $utilityService = $this->app->make('App\Services\UtilityService');
 
-        $customerName = ' 　顧客名3　 ';
+//        $customerName = ' 　顧客名3　 ';
         $params = [
-            'name' => $customerName,
+            'name' => $name,
         ];
         $this->postJson('api/customers', $params);
 
         //トリム処理
-        $customerName = $utilityService->mb_trim($customerName);
+//        $customerName = $utilityService->mb_trim($customerName);
         $params = [
-            'name' => $customerName,
+            'name' => $expected,
         ];
         $this->assertDatabaseHas('customers', $params);
-
     }
 
     /**
@@ -371,5 +373,17 @@ class CustomerTest extends TestCase
     private function getFirstCustomerId()
     {
         return Customer::query()->first()->value('id');
+    }
+
+    /**
+     * @return array
+     */
+    public function providerIncludeSpaceNames()
+    {
+        return [
+            [' 顧客名3 ', '顧客名3'],   //半角スペース
+            ['　顧客名3　', '顧客名3'], //全角スペース
+            [' 　顧客名3　 ', '顧客名3'], //半角全角混合
+        ];
     }
 }
