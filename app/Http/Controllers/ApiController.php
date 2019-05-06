@@ -33,7 +33,7 @@ class ApiController extends Controller
      */
     public function postCustomers(Request $request, CustomerService $customerService)
     {
-        $this->validate($request, ['name' => 'required']);
+        $this->validate($request, ['name' => 'required|max:50']);
         $customerService->addCustomer($request->json('name'));
     }
 
@@ -58,7 +58,7 @@ class ApiController extends Controller
     public function putCustomer(Request $request, $customer_id, CustomerService $customerService)
     {
         $this->validationCustomerId($customer_id, $customerService);
-        $this->validate($request, ['name' => 'required']);
+        $this->validate($request, ['name' => 'required|max:50']);
         $customerService->updateName($customer_id, $request->json('name'));
     }
 

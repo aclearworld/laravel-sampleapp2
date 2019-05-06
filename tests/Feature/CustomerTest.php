@@ -138,7 +138,19 @@ class CustomerTest extends TestCase
      * @test
      * @return void
      */
-    public function POST_api_customersのエラーレスポンスの確認()
+    public function api_customersへ、50字を超えるnameが送信された場合、422UnprocessableEntityが返却される()
+    {
+        //51字のname
+        $params = ['name' => '01234567890123456789012345678901234567890123456789+'];
+        $response = $this->postJson('api/customers', $params);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function POST_api_customers、nameが空の場合の、エラーレスポンスの確認()
     {
         $params = ['name' => ''];
         $response = $this->postJson('api/customers', $params);
@@ -147,6 +159,26 @@ class CustomerTest extends TestCase
             'message' => "The given data was invalid.",
             'errors' => [
                 'name' => ["name は必須項目です"]
+            ]
+        ];
+
+        $response->assertExactJson($error_response);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customersへ、50字を超えるnameが送信された場合、エラーレスポンスの確認()
+    {
+        //51字のname
+        $params = ['name' => '01234567890123456789012345678901234567890123456789+'];
+        $response = $this->postJson('api/customers', $params);
+
+        $error_response = [
+            'message' => "The given data was invalid.",
+            'errors' => [
+                'name' => ["name は 50 字以内で入力して下さい"]
             ]
         ];
 
@@ -313,6 +345,19 @@ class CustomerTest extends TestCase
      * @test
      * @return void
      */
+    public function api_customers_customer_idにPUTメソッドで、50字を超えるnameが送信された場合、422UnprocessableEntityが返却される()
+    {
+        $customer_id = $this->getFirstCustomerId();
+        //51字のname
+        $params = ['name' => '01234567890123456789012345678901234567890123456789+'];
+        $response = $this->putJson('api/customers/' . $customer_id, $params);
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function PUTapi_customers_customer_idのエラーレスポンスの確認()
     {
         $customer_id = $this->getFirstCustomerId();
@@ -325,6 +370,25 @@ class CustomerTest extends TestCase
             ]
         ];
 
+        $response->assertExactJson($error_response);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function api_customers_customer_idにPUTメソッドで、50字を超えるnameが送信された場合、エラーレスポンスの確認()
+    {
+        $customer_id = $this->getFirstCustomerId();
+        //51字のname
+        $params = ['name' => '01234567890123456789012345678901234567890123456789+'];
+        $response = $this->putJson('api/customers/' . $customer_id, $params);
+        $error_response = [
+            'message' => "The given data was invalid.",
+            'errors' => [
+                'name' => ["name は 50 字以内で入力して下さい"]
+            ]
+        ];
         $response->assertExactJson($error_response);
     }
 
