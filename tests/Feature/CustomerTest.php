@@ -102,16 +102,10 @@ class CustomerTest extends TestCase
     public function api_customersに顧客名をPOSTするとcustomersテーブルに追加されるデータは、トリム処理がされている(
         $name, $expected)
     {
-//        $utilityService = $this->app->make('App\Services\UtilityService');
-
-//        $customerName = ' 　顧客名3　 ';
         $params = [
             'name' => $name,
         ];
         $this->postJson('api/customers', $params);
-
-        //トリム処理
-//        $customerName = $utilityService->mb_trim($customerName);
         $params = [
             'name' => $expected,
         ];
@@ -270,6 +264,31 @@ class CustomerTest extends TestCase
 
     /**
      * @test
+     * @dataProvider providerIncludeSpaceNames
+     * @param $name
+     * @param $expected
+     */
+    public function api_customers_customer_idにPUTメソッドで、顧客名を編集する時、トリム処理が行われている(
+        $name, $expected)
+    {
+        //顧客を一つ取得し、名前を変更したデータを用意
+        $customer_id = $this->getFirstCustomerId();
+        $newName = $name;
+        $params = [
+            'name' => $newName,
+        ];
+
+        //put
+        $this->putJson('api/customers/' . $customer_id, $params);
+
+        //確認
+        $response = $this->get('api/customers/' . $customer_id);
+        $customer = $response->json();
+        $this->assertSame($expected, $customer['name']);
+    }
+
+    /**
+     * @test
      * @return void
      */
     public function api_customers_customer_idにPUTメソッドで、nameが空のJSONを渡した場合、422UnprocessableEntityが返却される()
@@ -382,8 +401,8 @@ class CustomerTest extends TestCase
     {
         return [
             [' 顧客名3 ', '顧客名3'],   //半角スペース
-            ['　顧客名3　', '顧客名3'], //全角スペース
-            [' 　顧客名3　 ', '顧客名3'], //半角全角混合
+            ['　顧客名4　', '顧客名4'], //全角スペース
+            [' 　顧客名5　 ', '顧客名5'], //半角全角混合
         ];
     }
 }

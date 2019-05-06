@@ -22,7 +22,7 @@
 
 ### その他
 - react
-- trim
+- [x] trim
 - max
   
  #### ui設計
