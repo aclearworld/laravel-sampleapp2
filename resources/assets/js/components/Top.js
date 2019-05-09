@@ -68,49 +68,14 @@ class Top extends Component {
         getCustomers();
     }
 
-    handleCustomerList(e) {
+    handleCustomerListButtonClick(e) {
         e.preventDefault();
         const {history} = this.props;
         history.push('/customerList');
     };
 
-    /**
-     *  表示用にエンティティを整形
-     * @param reports
-     * @param customers
-     * @returns {Array}
-     * @constructor
-     */
-    CreateDisplayItem(reports, customers) {
-        const displayItems = [];
-
-        if (reports.length !== 0 && customers.length !== 0) {
-            displayItems.push([]);
-            reports.forEach(report => {
-                let newItem = {};
-                newItem.customer = customers.find(customer => {
-                    return customer.id === report.customer_id;
-                });
-                newItem.report = report;
-                if (displayItems.slice(-1)[0].length === 0) {
-                    displayItems.slice(-1)[0].push(newItem);
-                } else {
-                    let befor = displayItems.slice(-1)[0][0];
-                    if (befor.report.visit_date === report.visit_date) {
-                        displayItems.slice(-1)[0].push(newItem);
-                    } else {
-                        displayItems.push([newItem]);
-                    }
-                }
-            });
-        }
-
-        return displayItems;
-    }
-
     render() {
-        const {classes, reports, customers} = this.props;
-        const displayItems = this.CreateDisplayItem(reports, customers);
+        const {classes, displayItems} = this.props;
 
         return (
             <div className={classes.root}>
@@ -145,7 +110,7 @@ class Top extends Component {
                         新規訪問記録作成
                     </Button>
                     <Button variant="contained" color="secondary" className={classes.button}
-                            onClick={e => this.handleCustomerList(e)}>
+                            onClick={e => this.handleCustomerListButtonClick(e)}>
                         顧客一覧
                     </Button>
                 </footer>

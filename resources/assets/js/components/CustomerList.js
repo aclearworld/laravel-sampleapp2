@@ -76,6 +76,12 @@ class CustomerList extends Component {
         getCustomers();
     }
 
+    handleAddCustomerClick(e) {
+        e.preventDefault();
+        const {history} = this.props;
+        history.push('/addCustomer');
+    }
+
     render() {
         const {classes, customers} = this.props;
 
@@ -108,13 +114,15 @@ class CustomerList extends Component {
                 </div>
 
                 <footer className={classes.footer}>
-                    <Button variant="contained" color="secondary" className={classes.button}>
+                    <Button variant="contained" color="secondary" className={classes.button}
+                            onClick={e => this.handleAddCustomerClick(e)}>
                         新規追加
                     </Button>
                 </footer>
             </div>
         );
     };
+
 
 }
 

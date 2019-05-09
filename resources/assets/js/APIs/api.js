@@ -7,3 +7,12 @@ export const getReportsApi = () => {
 export const getCustomersApi = () => {
     return axios.get('/api/customers');
 };
+
+/**
+ * 　新規顧客作成API
+ * @param name 顧客名
+ * @returns {AxiosPromise<any>}
+ */
+export const createNewCustomerApi = name => {
+    return axios.post('/api/customers', {name: name});
+};

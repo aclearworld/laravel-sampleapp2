@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter as Router, Link, withRouter, Redirect, Route, Switch} from "react-router-dom";
 import Top from "./containers/Top";
 import CustomerList from "./containers/CustomerList";
-import Button from "@material-ui/core/Button";
+import CreateNewCustomer from "./containers/CreateNewCustomer";
 
 class Application extends Component {
     render() {
@@ -11,6 +11,7 @@ class Application extends Component {
             <Router>
                 <Route exact path="/" component={Top}/>
                 <Route path="/customerList" component={CustomerList}/>
+                <Route path="/addCustomer" component={CreateNewCustomer}/>
             </Router>
         );
     };
