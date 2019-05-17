@@ -4,15 +4,11 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import cyan from '@material-ui/core/colors/cyan';
-import teal from '@material-ui/core/colors/teal'
-import grey from '@material-ui/core/colors/grey'
 import Button from '@material-ui/core/Button';
 import {Link} from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 
 const cyan100 = cyan['600'];
-const teal200 = teal['200'];
-const grey200 = grey['200'];
 
 const styles = theme => ({
     root: {
@@ -20,9 +16,13 @@ const styles = theme => ({
     },
     grow: {
         flexGrow: 1,
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     header: {
-        height: '50px',
+        height: '70px',
         width: '100%',
         backgroundColor: cyan100,
     },
@@ -31,7 +31,7 @@ const styles = theme => ({
         margin: theme.spacing.unit,
     },
     mainContent: {
-        minHeight: 'calc(100vh - 130px)',
+        minHeight: 'calc(100vh - 150px)',
         width: '100%',
     },
     link: {
@@ -56,7 +56,6 @@ class CreateNewCustomer extends Component {
 
     handleChange(e) {
         const name = e.target.value;
-        // 自分の値を変更
         this.setState({
             name: name
         })
@@ -64,15 +63,14 @@ class CreateNewCustomer extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const {createNewCustomer, history} = this.props;
+        const {createNewCustomer} = this.props;
         createNewCustomer(this.state.name);
-        // history.push('/viewer');
         this.setState({name: ''});
     };
 
-
     render() {
-        const {classes} = this.props;
+        const {classes, apiResult} = this.props;
+        console.log(apiResult);
 
         return (
             <div className={classes.root}>

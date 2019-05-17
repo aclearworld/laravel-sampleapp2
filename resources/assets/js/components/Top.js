@@ -26,7 +26,7 @@ const styles = theme => ({
         flexGrow: 1,
     },
     header: {
-        height: '50px',
+        height: '70px',
         width: '100%',
         backgroundColor: cyan100,
     },
@@ -35,7 +35,7 @@ const styles = theme => ({
         margin: theme.spacing.unit,
     },
     mainContent: {
-        minHeight: 'calc(100vh - 130px)',
+        minHeight: 'calc(100vh - 150px)',
         width: '100%',
     },
     list: {

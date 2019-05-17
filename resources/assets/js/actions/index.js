@@ -56,14 +56,10 @@ export const createNewCustomer = name => {
     return dispatch => {
         createNewCustomerApi(name)
             .then(res => {
-                if (res.status === 200) {
-                    dispatch(successCreateNewCustomer());
-                } else {
-                    dispatch(failedCreateNewCustomer(res.data.errors));
-                }
+                dispatch(successCreateNewCustomer());
             })
             .catch(err => {
-                console.error('caught error', err.stack);
+                dispatch(failedCreateNewCustomer(err.response.data.errors));
             })
     };
 };

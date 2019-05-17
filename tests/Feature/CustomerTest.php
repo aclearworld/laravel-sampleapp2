@@ -158,7 +158,7 @@ class CustomerTest extends TestCase
         $error_response = [
             'message' => "The given data was invalid.",
             'errors' => [
-                'name' => ["name は必須項目です"]
+                'name' => ["顧客名 は必須項目です"]
             ]
         ];
 
@@ -178,7 +178,7 @@ class CustomerTest extends TestCase
         $error_response = [
             'message' => "The given data was invalid.",
             'errors' => [
-                'name' => ["name は 50 字以内で入力して下さい"]
+                'name' => ["顧客名 は 50 字以内で入力して下さい"]
             ]
         ];
 
@@ -366,7 +366,7 @@ class CustomerTest extends TestCase
         $error_response = [
             'message' => "The given data was invalid.",
             'errors' => [
-                'name' => ["name は必須項目です"]
+                'name' => ["顧客名 は必須項目です"]
             ]
         ];
 
@@ -386,7 +386,7 @@ class CustomerTest extends TestCase
         $error_response = [
             'message' => "The given data was invalid.",
             'errors' => [
-                'name' => ["name は 50 字以内で入力して下さい"]
+                'name' => ["顧客名 は 50 字以内で入力して下さい"]
             ]
         ];
         $response->assertExactJson($error_response);

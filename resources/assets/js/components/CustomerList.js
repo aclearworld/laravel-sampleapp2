@@ -30,7 +30,7 @@ const styles = theme => ({
         justifyContent: 'center',
     },
     header: {
-        height: '50px',
+        height: '70px',
         width: '100%',
         backgroundColor: cyan100,
     },
