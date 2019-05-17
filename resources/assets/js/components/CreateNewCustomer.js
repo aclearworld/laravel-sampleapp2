@@ -7,6 +7,8 @@ import Button from '@material-ui/core/Button';
 import {Link} from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import {commonStyle} from "./commonStyle";
+import Modal from "@material-ui/core/Modal";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const styles = theme => ({
     root: commonStyle.root,
@@ -29,13 +31,27 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
     },
+    paper: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: theme.spacing.unit * 50,
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing.unit * 4,
+        outline: 'none',
+    },
+    error: commonStyle.error,
 });
 
 class CreateNewCustomer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: ''
+            name: '',
+            isSubmitted: false,
+            open: false,
         }
     }
 
@@ -50,12 +66,29 @@ class CreateNewCustomer extends Component {
         e.preventDefault();
         const {createNewCustomer} = this.props;
         createNewCustomer(this.state.name);
-        this.setState({name: ''});
+        this.setState({name: '', isSubmitted: true});
+    };
+
+    handleModalClose() {
+        this.setState({isSubmitted: false});
     };
 
     render() {
         const {classes, apiResult} = this.props;
         console.log(apiResult);
+
+        const ResultInfo = () => {
+            if (!apiResult.hasError) {
+                return <Typography variant="subtitle1">登録に成功しました</Typography>
+            } else {
+                return (
+                    <React.Fragment>
+                        <Typography variant="subtitle1">登録に失敗しました</Typography>
+                        <Typography className={classes.error} variant="subtitle1">{apiResult.errors.name[0]}</Typography>
+                    </React.Fragment>
+                )
+            }
+        };
 
         return (
             <div className={classes.root}>
@@ -69,7 +102,8 @@ class CreateNewCustomer extends Component {
                         <Typography variant="h5" color="inherit" className={classes.grow}>
                             顧客新規作成
                         </Typography>
-                        <Button onClick={e => this.handleSubmit(e)} variant="contained" color="secondary"
+                        <Button disabled={apiResult.isProcessing} onClick={e => this.handleSubmit(e)}
+                                variant="contained" color="secondary"
                                 className={classes.button}>
                             登録
                         </Button>
@@ -85,8 +119,25 @@ class CreateNewCustomer extends Component {
                         value={this.state.name}
                         onChange={e => this.handleChange(e)}
                     />
-                </div>
 
+                    <Modal
+                        open={this.state.isSubmitted}
+                        onClose={() => this.handleModalClose()}
+                    >
+                        <div className={classes.paper}>
+                            {apiResult.isProcessing &&
+                            <React.Fragment>
+                                <Typography variant="h6">
+                                    登録中です...
+                                </Typography>
+                                <CircularProgress/>
+                            </React.Fragment>
+                            }
+                            {!apiResult.isProcessing && <ResultInfo/>}
+                        </div>
+                    </Modal>
+
+                </div>
             </div>
         );
     };

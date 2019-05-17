@@ -1,10 +1,12 @@
 import cyan from "@material-ui/core/colors/cyan";
 import teal from "@material-ui/core/colors/teal";
 import grey from "@material-ui/core/colors/grey";
+import red from "@material-ui/core/colors/red";
 
 const cyan100 = cyan['600'];
 const teal200 = teal['200'];
 const grey200 = grey['200'];
+const red400 = red['400'];
 
 export const commonStyle = {
     root: {
@@ -48,5 +50,8 @@ export const commonStyle = {
     },
     textField: {
         width: 200,
+    },
+    error: {
+        color: red400,
     },
 };

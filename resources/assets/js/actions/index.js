@@ -1,6 +1,12 @@
 import {actionTypes} from "./actionTypes";
 import {getReportsApi, getCustomersApi, createNewCustomerApi} from '../APIs/api'
 
+const startRequest = () => {
+    return {
+        type: actionTypes.WAIT,
+    };
+};
+
 const receiveReports = reports => {
     return {
         type: actionTypes.RECEIVE_REPORTS,
@@ -54,6 +60,7 @@ export const getCustomers = () => {
 
 export const createNewCustomer = name => {
     return dispatch => {
+        dispatch(startRequest());
         createNewCustomerApi(name)
             .then(res => {
                 dispatch(successCreateNewCustomer());
