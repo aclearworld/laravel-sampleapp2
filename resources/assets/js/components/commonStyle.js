@@ -47,8 +47,6 @@ export const commonStyle = {
         justifyContent: 'center',
     },
     textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
         width: 200,
     },
 };

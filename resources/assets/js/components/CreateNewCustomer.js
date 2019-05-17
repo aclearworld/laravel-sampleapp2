@@ -3,46 +3,31 @@ import {withStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import cyan from '@material-ui/core/colors/cyan';
 import Button from '@material-ui/core/Button';
 import {Link} from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
-
-const cyan100 = cyan['600'];
+import {commonStyle} from "./commonStyle";
 
 const styles = theme => ({
-    root: {
-        flexGrow: 1,
-    },
+    root: commonStyle.root,
     grow: {
-        flexGrow: 1,
+        ...commonStyle.grow,
         height: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    header: {
-        height: '70px',
-        width: '100%',
-        backgroundColor: cyan100,
-    },
+    header: commonStyle.header,
     button: {
-        fontSize: '18px',
+        ...commonStyle.button,
         margin: theme.spacing.unit,
     },
-    mainContent: {
-        minHeight: 'calc(100vh - 150px)',
-        width: '100%',
-    },
-    link: {
-        height: '100%',
-        textDecoration: 'none',
-        color: 'white'
-    },
+    mainContent: commonStyle.mainContent,
+    link: commonStyle.link,
     textField: {
+        ...commonStyle.textField,
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
-        width: 200,
     },
 });
 

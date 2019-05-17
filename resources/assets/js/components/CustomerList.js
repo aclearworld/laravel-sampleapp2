@@ -3,9 +3,6 @@ import {withStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import cyan from '@material-ui/core/colors/cyan';
-import teal from '@material-ui/core/colors/teal'
-import grey from '@material-ui/core/colors/grey'
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -13,57 +10,30 @@ import ListItemText from '@material-ui/core/ListItemText';
 import NavigateNext from '@material-ui/icons/NavigateNext'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import {Link} from "react-router-dom";
-
-const cyan100 = cyan['600'];
-const teal200 = teal['200'];
-const grey200 = grey['200'];
+import {commonStyle} from "./commonStyle";
 
 const styles = theme => ({
-    root: {
-        flexGrow: 1,
-    },
+    root: commonStyle.root,
     grow: {
-        flexGrow: 1,
+        ...commonStyle.grow,
         height: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    header: {
-        height: '70px',
-        width: '100%',
-        backgroundColor: cyan100,
-    },
-    link: {
-        height: '100%',
-        textDecoration: 'none',
-        color: 'white'
-    },
+    header: commonStyle.header,
+    link: commonStyle.link,
     button: {
-        fontSize: '18px',
+        ...commonStyle.button,
         margin: theme.spacing.unit,
     },
-    mainContent: {
-        minHeight: 'calc(100vh - 130px)',
-        width: '100%',
-    },
-    list: {
-        width: '100%',
-        backgroundColor: grey200,
-        fontSize: '15px',
-    },
+    mainContent: commonStyle.mainContent,
+    list: commonStyle.list,
     listItem: {
-        width: '100%',
+        ...commonStyle.listItem,
         backgroundColor: theme.palette.background.paper,
-        fontSize: '15px',
     },
-    footer: {
-        height: '80px',
-        width: '100%',
-        backgroundColor: teal200,
-        display: 'flex',
-        justifyContent: 'center',
-    },
+    footer: commonStyle.footer,
 });
 
 class CustomerList extends Component {
