@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import {commonStyle} from "./commonStyle";
 import Modal from "@material-ui/core/Modal";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import _ from 'lodash';
 
 const styles = theme => ({
     root: commonStyle.root,
@@ -45,37 +46,74 @@ const styles = theme => ({
     error: commonStyle.error,
 });
 
-class CreateNewCustomer extends Component {
+class EditCustomer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             name: '',
             isOpenModal: false,
-        }
+        };
+        this.id = this.props.match.params.id;
+        this.isBackOnNextAction = false;
     }
+
+    componentDidMount() {
+        const {getCustomer} = this.props;
+        getCustomer(this.id);
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        //顧客のアップデート
+        if ((_.isEmpty(prevProps.editingCustomer) && !_.isEmpty(this.props.editingCustomer))
+            || (prevProps.editingCustomer.id !== this.props.editingCustomer.id)
+        ) {
+            this.setState({
+                name: this.props.editingCustomer.name
+            });
+        }
+
+        //エラー時の処理
+        if (prevProps.apiResult.hasError !== this.props.apiResult.hasError) {
+            this.setState({
+                isOpenModal: this.props.apiResult.hasError
+            });
+            this.isBackOnNextAction = this.props.apiResult.errors.invalidId[0] ? true : false;
+        }
+    };
 
     handleChange(e) {
         const name = e.target.value;
         this.setState({
             name: name
-        })
+        });
     };
 
-    handleSubmit(e) {
-        e.preventDefault();
-        const {createNewCustomer} = this.props;
-        createNewCustomer(this.state.name);
-        this.setState({name: '', isOpenModal: true});
+    handleUpdateSubmit(e) {
+        // e.preventDefault();
+        // const {updateCustomer} = this.props;
+        // updateCustomer(this.id, this.state.name);
+        // this.setState({name: '', isSubmitted: true});
     };
+
+    // handleDeleteSubmit(e) {
+    //     e.preventDefault();
+    //     const {id, deleteCustomer} = this.props;
+    //     deleteCustomer(id, this.state.name);
+    //     this.setState({name: '', isSubmitted: true});
+    // };
 
     handleModalClose() {
+        if (this.isBackOnNextAction) {
+            const {history} = this.props;
+            history.push('/customerList');
+        }
+
         this.setState({isOpenModal: false});
     };
 
     render() {
         const {classes, apiResult} = this.props;
-
-       // TODO エラーレスポンスをreducerで整理する
+        console.log(apiResult)
 
         const ResultInfo = () => {
             if (!apiResult.hasError) {
@@ -83,8 +121,9 @@ class CreateNewCustomer extends Component {
             } else {
                 return (
                     <React.Fragment>
-                        <Typography variant="subtitle1">登録に失敗しました</Typography>
-                        <Typography className={classes.error} variant="subtitle1">{apiResult.errors.name[0]}</Typography>
+                        <Typography variant="subtitle1">不正な処理です</Typography>
+                        <Typography className={classes.error}
+                                    variant="subtitle1">{apiResult.errors.invalidId[0]}</Typography>
                     </React.Fragment>
                 )
             }
@@ -100,12 +139,12 @@ class CreateNewCustomer extends Component {
                             </Typography>
                         </Link>
                         <Typography variant="h5" color="inherit" className={classes.grow}>
-                            顧客新規作成
+                            顧客編集
                         </Typography>
-                        <Button disabled={apiResult.isProcessing} onClick={e => this.handleSubmit(e)}
+                        <Button onClick={e => this.handleUpdateSubmit(e)}
                                 variant="contained" color="secondary"
                                 className={classes.button}>
-                            登録
+                            更新
                         </Button>
                     </Toolbar>
                 </AppBar>
@@ -144,4 +183,4 @@ class CreateNewCustomer extends Component {
 
 }
 
-export default withStyles(styles)(CreateNewCustomer);
+export default withStyles(styles)(EditCustomer);

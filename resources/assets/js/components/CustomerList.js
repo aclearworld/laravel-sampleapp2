@@ -73,12 +73,14 @@ class CustomerList extends Component {
                 <div className={classes.mainContent}>
                     <List component="nav" className={classes.list}>
                         {customers.map(customer => (
-                            <ListItem key={customer.id} button className={classes.listItem}>
-                                <ListItemText primary={customer.name}/>
-                                <ListItemIcon>
-                                    <NavigateNext/>
-                                </ListItemIcon>
-                            </ListItem>
+                            <Link key={customer.id} to={`/customer/${customer.id}`} className={classes.link}>
+                                <ListItem button className={classes.listItem}>
+                                    <ListItemText primary={customer.name}/>
+                                    <ListItemIcon>
+                                        <NavigateNext/>
+                                    </ListItemIcon>
+                                </ListItem>
+                            </Link>
                         ))}
                     </List>
                 </div>
