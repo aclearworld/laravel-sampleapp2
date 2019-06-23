@@ -54,4 +54,11 @@ export const commonStyle = {
     error: {
         color: red400,
     },
+    paper: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        outline: 'none',
+    }
 };
