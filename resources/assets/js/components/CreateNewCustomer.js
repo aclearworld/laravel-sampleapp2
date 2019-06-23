@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import {commonStyle} from "./commonStyle";
 import Modal from "@material-ui/core/Modal";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import {ResultInfo} from "./commons";
 
 const styles = theme => ({
     root: commonStyle.root,
@@ -74,20 +75,7 @@ class CreateNewCustomer extends Component {
 
     render() {
         const {classes, apiResult} = this.props;
-
-        const ResultInfo = () => {
-            if (!apiResult.hasError) {
-                return <Typography variant="subtitle1">登録に成功しました</Typography>
-            } else {
-                return (
-                    <React.Fragment>
-                        <Typography variant="subtitle1">{apiResult.errorTitle}</Typography>
-                        <Typography className={classes.error}
-                                    variant="subtitle1">{apiResult.errors.name[0]}</Typography>
-                    </React.Fragment>
-                )
-            }
-        };
+        const displayErrors = [{key: 'name', indexs: [0]}];
 
         return (
             <div className={classes.root}>
@@ -132,7 +120,8 @@ class CreateNewCustomer extends Component {
                                 <CircularProgress/>
                             </React.Fragment>
                             }
-                            {!apiResult.isProcessing && <ResultInfo/>}
+                            {!apiResult.isProcessing &&
+                            <ResultInfo successMsg="登録に成功しました" apiResult={apiResult} displayErrors={displayErrors}/>}
                         </div>
                     </Modal>
 

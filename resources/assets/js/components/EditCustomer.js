@@ -11,6 +11,7 @@ import Modal from "@material-ui/core/Modal";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import _ from 'lodash';
 import {errorTypes} from "../consts";
+import {ResultInfo} from "./commons";
 
 const styles = theme => ({
     root: commonStyle.root,
@@ -113,20 +114,7 @@ class EditCustomer extends Component {
 
     render() {
         const {classes, apiResult} = this.props;
-
-        const ResultInfo = () => {
-            if (!apiResult.hasError) {
-                return <Typography variant="subtitle1">更新に成功しました</Typography>
-            } else {
-                return (
-                    <React.Fragment>
-                        <Typography variant="subtitle1">{apiResult.errorTitle}</Typography>
-                        <Typography className={classes.error}
-                                    variant="subtitle1">{apiResult.errors.invalidId[0]}</Typography>
-                    </React.Fragment>
-                )
-            }
-        };
+        const displayErrors = [{key: 'invalidId', indexs: [0]}];
 
         return (
             <div className={classes.root}>
@@ -171,7 +159,8 @@ class EditCustomer extends Component {
                                 <CircularProgress/>
                             </React.Fragment>
                             }
-                            {!apiResult.isProcessing && <ResultInfo/>}
+                            {!apiResult.isProcessing &&
+                            <ResultInfo successMsg="登録に成功しました" apiResult={apiResult} displayErrors={displayErrors}/>}
                         </div>
                     </Modal>
 
