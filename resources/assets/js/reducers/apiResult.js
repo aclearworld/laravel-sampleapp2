@@ -4,6 +4,8 @@ const initialState = {
     isProcessing: false,
     hasError: false,
     errors: null,
+    errorTitle: '',
+    errorType: null,
 };
 
 export const apiResult = (state = initialState, action) => {
@@ -19,7 +21,9 @@ export const apiResult = (state = initialState, action) => {
             return {
                 ...initialState,
                 hasError: true,
-                errors: action.payload.errors
+                errors: action.payload.errors,
+                errorTitle: action.payload.errorTitle,
+                errorType: action.payload.errorType,
             };
         default:
             return state;

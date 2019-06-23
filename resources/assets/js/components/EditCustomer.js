@@ -10,6 +10,7 @@ import {commonStyle} from "./commonStyle";
 import Modal from "@material-ui/core/Modal";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import _ from 'lodash';
+import {errorTypes} from "../consts";
 
 const styles = theme => ({
     root: commonStyle.root,
@@ -72,12 +73,12 @@ class EditCustomer extends Component {
             });
         }
 
-        //エラー時の処理
+        //エラー時にモーダルを表示する
         if (prevProps.apiResult.hasError !== this.props.apiResult.hasError) {
             this.setState({
                 isOpenModal: this.props.apiResult.hasError
             });
-            this.isBackOnNextAction = this.props.apiResult.errors.invalidId[0] ? true : false;
+            this.isBackOnNextAction = this.props.apiResult.errorType === errorTypes.invalidOperation;
         }
     };
 
@@ -102,26 +103,24 @@ class EditCustomer extends Component {
     //     this.setState({name: '', isSubmitted: true});
     // };
 
+    /**
+     * 不正な顧客IDでページを開いた時は、モーダルが閉じた後に、前のページに戻る
+     */
     handleModalClose() {
-        if (this.isBackOnNextAction) {
-            const {history} = this.props;
-            history.push('/customerList');
-        }
-
+        if (this.isBackOnNextAction) history.back();
         this.setState({isOpenModal: false});
     };
 
     render() {
         const {classes, apiResult} = this.props;
-        console.log(apiResult)
 
         const ResultInfo = () => {
             if (!apiResult.hasError) {
-                return <Typography variant="subtitle1">登録に成功しました</Typography>
+                return <Typography variant="subtitle1">更新に成功しました</Typography>
             } else {
                 return (
                     <React.Fragment>
-                        <Typography variant="subtitle1">不正な処理です</Typography>
+                        <Typography variant="subtitle1">{apiResult.errorTitle}</Typography>
                         <Typography className={classes.error}
                                     variant="subtitle1">{apiResult.errors.invalidId[0]}</Typography>
                     </React.Fragment>
@@ -167,7 +166,7 @@ class EditCustomer extends Component {
                             {apiResult.isProcessing &&
                             <React.Fragment>
                                 <Typography variant="h6">
-                                    登録中です...
+                                    更新中です...
                                 </Typography>
                                 <CircularProgress/>
                             </React.Fragment>

@@ -75,16 +75,15 @@ class CreateNewCustomer extends Component {
     render() {
         const {classes, apiResult} = this.props;
 
-       // TODO エラーレスポンスをreducerで整理する
-
         const ResultInfo = () => {
             if (!apiResult.hasError) {
                 return <Typography variant="subtitle1">登録に成功しました</Typography>
             } else {
                 return (
                     <React.Fragment>
-                        <Typography variant="subtitle1">登録に失敗しました</Typography>
-                        <Typography className={classes.error} variant="subtitle1">{apiResult.errors.name[0]}</Typography>
+                        <Typography variant="subtitle1">{apiResult.errorTitle}</Typography>
+                        <Typography className={classes.error}
+                                    variant="subtitle1">{apiResult.errors.name[0]}</Typography>
                     </React.Fragment>
                 )
             }

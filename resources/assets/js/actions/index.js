@@ -1,5 +1,8 @@
 import {actionTypes} from "./actionTypes";
 import {getReportsApi, getCustomersApi, createNewCustomerApi, getCustomerApi} from '../APIs/api'
+import {errorTypes} from "../consts";
+
+const invalidOperationMsg = '不正な操作です';
 
 const startRequest = () => {
     return {
@@ -28,10 +31,14 @@ const receiveCustomer = customer => {
     };
 };
 
-const failedGetCustomer = errors => {
+const failedGetCustomer = (errors, errorTitle, errorType) => {
     return {
         type: actionTypes.FAILED_GET_CUSTOMER,
-        payload: {errors: errors}
+        payload: {
+            errors: errors,
+            errorTitle: errorTitle,
+            errorType: errorType,
+        }
     };
 };
 
@@ -41,10 +48,14 @@ const successCreateNewCustomer = () => {
     };
 };
 
-const failedCreateNewCustomer = errors => {
+const failedCreateNewCustomer = (errors, errorTitle, errorType) => {
     return {
         type: actionTypes.FAILED_CREATE_NEW_CUSTOMER,
-        payload: {errors: errors}
+        payload: {
+            errors: errors,
+            errorTitle: errorTitle,
+            errorType: errorType,
+        }
     };
 };
 
@@ -54,10 +65,13 @@ const successUpdateCustomer = () => {
     };
 };
 
-const failedUpdateCustomer = errors => {
+const failedUpdateCustomer = (errors, errorTitle) => {
     return {
         type: actionTypes.FAILED_UPDATE_CUSTOMER,
-        payload: {errors: errors}
+        payload: {
+            errors: errors,
+            errorTitle: errorTitle,
+        }
     };
 };
 
@@ -94,7 +108,7 @@ export const getCustomer = id => {
             })
             .catch(err => {
                 let errors = {invalidId: ['指定された顧客は存在しません']};
-                dispatch(failedGetCustomer(errors));
+                dispatch(failedGetCustomer(errors, invalidOperationMsg, errorTypes.invalidOperation));
             })
     };
 };
@@ -107,24 +121,24 @@ export const createNewCustomer = name => {
                 dispatch(successCreateNewCustomer());
             })
             .catch(err => {
-                dispatch(failedCreateNewCustomer(err.response.data.errors));
+                dispatch(failedCreateNewCustomer(err.response.data.errors, '登録に失敗しました', errorTypes.validatedOperation));
             })
     };
 };
 
-export const updateCustomer = (id, name) => {
-    return dispatch => {
-        dispatch(startRequest());
-        updateCustomer(id, name)
-            .then(res => {
-                dispatch(successUpdateCustomer());
-            })
-            .catch(err => {
-                if (err.response.status === 404) {
-                    let errors = {invalidId: ['指定された顧客は存在しません']};
-                    dispatch(failedCreateNewCustomer(errors));
-                }
-                dispatch(failedUpdateCustomer(err.response.data.errors));
-            })
-    };
-};
+// export const updateCustomer = (id, name) => {
+//     return dispatch => {
+//         dispatch(startRequest());
+//         updateCustomer(id, name)
+//             .then(res => {
+//                 dispatch(successUpdateCustomer());
+//             })
+//             .catch(err => {
+//                 if (err.response.status === 404) {
+//                     const errors = {invalidId: ['指定された顧客は存在しません']};
+//                     dispatch(failedCreateNewCustomer(errors, fraudOperationMsg));
+//                 }
+//                 dispatch(failedUpdateCustomer(err.response.data.errors, '顧客情報の更新に失敗しました'));
+//             })
+//     };
+// };

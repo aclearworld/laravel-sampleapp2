@@ -1,7 +1,6 @@
 import {connect} from "react-redux";
 import {getCustomer} from "../actions/index";
 import EditCustomer from "../components/EditCustomer";
-import {apiResult} from "../reducers/apiResult";
 
 const mapStateToProps = state => {
     return {
