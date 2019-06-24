@@ -156,7 +156,7 @@ class EditCustomer extends Component {
                             </React.Fragment>
                             }
                             {!apiResult.isProcessing &&
-                            <ResultInfo successMsg="登録に成功しました" apiResult={apiResult} displayErrors={displayErrors}/>}
+                            <ResultInfo successMsg="更新に成功しました" apiResult={apiResult} displayErrors={displayErrors}/>}
                         </div>
                     </Modal>
 
