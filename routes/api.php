@@ -15,8 +15,8 @@ use Illuminate\Http\Request;
 
 Route::get('customers', 'ApiController@getCustomers');
 Route::post('customers', 'ApiController@postCustomers');
-Route::get('customers/{customer_id}','ApiController@getCustomer');
-Route::put('customers/{customer_id}','ApiController@putCustomer');
+Route::get('customers/{customer_id}', 'ApiController@getCustomer');
+Route::put('customers/{customer_id}', 'ApiController@putCustomer');
 Route::delete('customers/{customer_id}', 'ApiController@deleteCustomer');
 Route::get('reports', 'ApiController@getReports');
 Route::post('reports', 'ApiController@postReport');
@@ -24,3 +24,9 @@ Route::get('reports/{report_id}', 'ApiController@getReport');
 Route::put('reports/{report_id}', 'ApiController@putReport');
 Route::delete('reports/{report_id}', 'ApiController@deleteReport');
 
+// auth関連
+Route::post('/login', 'AuthController@login');
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('/me', 'AuthController@me');
+    Route::post('/logout', 'AuthController@logout');
+});

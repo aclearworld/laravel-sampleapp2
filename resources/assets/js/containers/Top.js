@@ -1,5 +1,6 @@
 import {connect} from "react-redux";
 import {getReports, getCustomers} from "../actions/index";
+import {getUser, login, logout} from "../actions/authActions";
 import Top from "../components/Top";
 
 const mapStateToProps = state => {
@@ -37,6 +38,9 @@ const mapDispatchToProps = dispatch => {
     return {
         getReports: () => dispatch(getReports()),
         getCustomers: () => dispatch(getCustomers()),
+        logout: () => dispatch(logout()),
+        login: () => dispatch(login()),
+        getUser: () => dispatch(getUser()),
     };
 };
 

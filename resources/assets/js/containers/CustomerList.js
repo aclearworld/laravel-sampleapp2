@@ -5,6 +5,7 @@ import CustomerList from "../components/CustomerList";
 const mapStateToProps = state => {
     return {
         customers: state.customers,
+        isLogin: state.auth.isLogin,
     };
 };
 

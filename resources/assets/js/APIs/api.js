@@ -1,5 +1,35 @@
 import axios from 'axios';
 
+//auth関連
+
+/**
+ * ログイン
+ * @returns {AxiosPromise<any>}
+ */
+export const loginApi = () => {
+    const mockUser = {
+        email: 'admin@example.com',
+        password: 'password',
+    };
+    return axios.post('/api/login', mockUser);
+};
+
+/**
+ * ログアウト
+ * @returns {AxiosPromise<any>}
+ */
+export const logoutApi = () => {
+    return axios.post('/api/logout');
+};
+
+/**
+ * ユーザー情報取得
+ * @returns {AxiosPromise<any>}
+ */
+export const getUserApi = () => {
+    return axios.get('/api/me');
+};
+
 export const getReportsApi = () => {
     return axios.get('/api/reports');
 };
@@ -32,6 +62,6 @@ export const createNewCustomerApi = name => {
  * @param id 顧客id
  * @returns {AxiosPromise<any>}
  */
-export const updateCustomerApi = ( id ,name ) => {
+export const updateCustomerApi = (id, name) => {
     return axios.post(`/api/customers${id}`, {name: name});
 };

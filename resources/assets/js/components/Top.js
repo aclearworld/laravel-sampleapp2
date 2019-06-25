@@ -46,6 +46,29 @@ class Top extends Component {
         history.push('/customerList');
     };
 
+    /**
+     *  ログインボタンクリック時
+     * @param e イベントオブジェクト
+     */
+    handleLoginButtonClick(e) {
+        const {login} = this.props;
+        login();
+    }
+
+    /**
+     *  ログアウトボタンクリック時
+     * @param e イベントオブジェクト
+     */
+    handleLogoutButtonClick(e) {
+        const {logout} = this.props;
+        logout();
+    }
+
+    handleGetUserInfoButtonClick(e) {
+        const {getUser} = this.props;
+        getUser();
+    }
+
     render() {
         const {classes, displayItems} = this.props;
 
@@ -56,6 +79,21 @@ class Top extends Component {
                         <Typography variant="h5" color="inherit" className={classes.grow}>
                             訪問記録一覧
                         </Typography>
+                        <Button onClick={e => this.handleLoginButtonClick(e)}
+                                variant="contained" color="secondary"
+                                className={classes.button}>
+                            ログイン
+                        </Button>
+                        <Button onClick={e => this.handleLogoutButtonClick(e)}
+                                variant="contained" color="secondary"
+                                className={classes.button}>
+                            ログアウト
+                        </Button>
+                        <Button onClick={e => this.handleGetUserInfoButtonClick(e)}
+                                variant="contained" color="secondary"
+                                className={classes.button}>
+                            ユーザ情報取得
+                        </Button>
                     </Toolbar>
                 </AppBar>
 
@@ -89,7 +127,6 @@ class Top extends Component {
             </div>
         );
     };
-
 }
 
 export default withStyles(styles)(Top);
