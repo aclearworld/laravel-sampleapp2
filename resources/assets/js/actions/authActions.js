@@ -1,6 +1,8 @@
 import {getUserApi, loginApi, logoutApi} from '../APIs/api'
 import {actionTypes} from "./actionTypes";
 import axios from "axios";
+import jsCookie from 'js-cookie';
+import {AuthorizationTokenCookieName} from "../consts";
 
 //auth関連のアクション
 const successLogin = () => {
@@ -30,9 +32,11 @@ export const login = () => {
         loginApi()
             .then(res => {
                 const token = res.data.access_token;
-                console.log(token);
                 console.log('ログインしました');
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+                //クッキーに1日間セット
+                jsCookie.set(AuthorizationTokenCookieName, token, {expires: 1});
+
                 dispatch(successLogin());
             })
             .catch(err => {
@@ -46,6 +50,7 @@ export const logout = () => {
         logoutApi()
             .then(res => {
                 axios.defaults.headers.common['Authorization'] = '';
+                jsCookie.remove(AuthorizationTokenCookieName);
                 console.log('ログアウトしました');
                 dispatch(successLogout());
             })
