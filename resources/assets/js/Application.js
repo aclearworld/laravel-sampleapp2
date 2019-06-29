@@ -10,8 +10,8 @@ class Application extends Component {
         return (
             <Router>
                 <Route exact path="/" component={Top}/>
-                <Route path="/login" component={CustomerList}/>
-                <Route path="/user" component={CustomerList}/>
+                {/*<Route path="/login" component={CustomerList}/>*/}
+                {/*<Route path="/user" component={CustomerList}/>*/}
                 <Route path="/customerList" component={CustomerList}/>
                 <Route path="/customer/:id" component={EditCustomer}/>
                 <Route path="/addCustomer" component={CreateNewCustomer}/>

@@ -16,5 +16,6 @@ Route::get('/login/twitter/callback', 'AuthController@twitterCallback');
 
 Route::get('/{any}', function () {
     return view('welcome');
-})->where('any', '.*');
+})->where('any', '.*')
+->name('top');
 

@@ -3,7 +3,7 @@ import axios from 'axios';
 //auth関連
 
 /**
- * ログイン
+ * twitterログイン
  * @returns {AxiosPromise<any>}
  */
 export const loginApi = () => {
@@ -29,6 +29,15 @@ export const logoutApi = () => {
 export const getUserApi = () => {
     return axios.get('/api/me');
 };
+
+/**
+ * アクセストークン取得
+ * @returns {AxiosPromise<any>}
+ */
+export const getAuthTokenApi = () => {
+    return axios.get('/login/getAuthToken');
+};
+
 
 export const getReportsApi = () => {
     return axios.get('/api/reports');

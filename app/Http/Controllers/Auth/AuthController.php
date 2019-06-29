@@ -6,7 +6,6 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Tymon\JWTAuth\JWTAuth;
 
 /**
  * Class AuthController
@@ -16,9 +15,7 @@ class  AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
-        Log::debug($credentials);
-        $oauthUrl = $this->twitter($request);
+        $oauthUrl = $this->twitter();
         return response()->json(['oauthUrl' => $oauthUrl]);
     }
 
@@ -65,13 +62,18 @@ class  AuthController extends Controller
         $user = User::where('auth_id_str', $twitter_user_info->id_str)->first();
         if (!$user) {
             $user = User::create([
+                'name' => $twitter_user_info->name,
                 'auth_id_str' => $twitter_user_info->id_str,
             ]);
         }
 
-        auth()->login($user);
-        $token =  auth()->fromUser($user);
-        return $this->respondWithToken($token);
+        //認証させる
+        auth()->login($user, true);
+
+        //jwtトークン取得
+        $token = auth('api')->fromUser($user);
+        //トップ画面に遷移　metaタグにトークンを設定し、js側でcookieにぶち込む
+        return view('welcome', ['token' => $token]);
     }
 
     protected function respondWithToken($token)
@@ -83,24 +85,25 @@ class  AuthController extends Controller
         ]);
     }
 
-    private function twitter(Request $request): string
+    /**
+     * @return string
+     * @throws \Abraham\TwitterOAuth\TwitterOAuthException
+     */
+    private function twitter(): string
     {
         $twitter = new TwitterOAuth(
             config('twitter.consumer_key'),
             config('twitter.consumer_secret')
         );
 
-        $token = $twitter->oauth('oauth/request_token', array(
+        $token = $twitter->oauth('oauth/request_token', [
             'oauth_callback' => config('twitter.callback_url')
-        ));
+        ]);
 
-        // セッションIDの再発行
-        $request->session()->regenerate();
-
-        session(array(
+        session([
             'oauth_token' => $token['oauth_token'],
             'oauth_token_secret' => $token['oauth_token_secret'],
-        ));
+        ]);
 
         # 認証画面へ移動させる
         ## 毎回認証をさせたい場合： 'oauth/authorize'
