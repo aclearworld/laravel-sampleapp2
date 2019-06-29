@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Tymon\JWTAuth\JWTAuth;
 
 /**
  * Class AuthController
@@ -20,12 +20,6 @@ class  AuthController extends Controller
         Log::debug($credentials);
         $oauthUrl = $this->twitter($request);
         return response()->json(['oauthUrl' => $oauthUrl]);
-
-//        if (!$token = auth('api')->attempt($credentials)) {
-//            return response()->json(['error' => 'Unauthorized'], 401);
-//        }
-//        Log::debug($token);
-//        return $this->respondWithToken($token);
     }
 
     public function logout()
@@ -38,7 +32,6 @@ class  AuthController extends Controller
     {
         return response()->json(auth()->user());
     }
-
 
     /**
      * @param Request $request
@@ -54,7 +47,6 @@ class  AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        # request_tokenからaccess_tokenを取得
         $twitter = new TwitterOAuth(
             $oauth_token,
             $oauth_token_secret
@@ -63,28 +55,23 @@ class  AuthController extends Controller
             'oauth_verifier' => $request->oauth_verifier,
             'oauth_token' => $request->oauth_token,
         ));
-        # access_tokenを用いればユーザー情報へアクセスできるため、それを用いてTwitterOAuthをinstance化
         $twitter_user = new TwitterOAuth(
             config('twitter.consumer_key'),
             config('twitter.consumer_secret'),
             $token['oauth_token'],
             $token['oauth_token_secret']
         );
-
-        # 本来はアカウント有効状態を確認するためのものですが、プロフィール取得にも使用可能
         $twitter_user_info = $twitter_user->get('account/verify_credentials');
+        $user = User::where('auth_id_str', $twitter_user_info->id_str)->first();
+        if (!$user) {
+            $user = User::create([
+                'auth_id_str' => $twitter_user_info->id_str,
+            ]);
+        }
 
-         $user = User::where('auth_id', $twitter_user_info->id)->first();
-         if (!$user) {
-             $user = User::create([
-                 'auth_id' => $twitter_user_info->id
-           ]);
-         }
-
-         auth()->login($user);
-
-        //        Log::debug($twitter_user_info);
-        dd($twitter_user_info);
+        auth()->login($user);
+        $token =  auth()->fromUser($user);
+        return $this->respondWithToken($token);
     }
 
     protected function respondWithToken($token)
@@ -110,7 +97,6 @@ class  AuthController extends Controller
         // セッションIDの再発行
         $request->session()->regenerate();
 
-        # 認証画面で認証を行うためSessionに入れる
         session(array(
             'oauth_token' => $token['oauth_token'],
             'oauth_token_secret' => $token['oauth_token_secret'],
