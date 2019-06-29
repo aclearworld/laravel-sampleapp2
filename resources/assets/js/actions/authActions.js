@@ -31,12 +31,12 @@ export const login = () => {
     return dispatch => {
         loginApi()
             .then(res => {
-                const token = res.data.access_token;
-                console.log('ログインしました');
-                console.log(token);
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-                //クッキーに1日間セット
-                jsCookie.set(AuthorizationTokenCookieName, token, {expires: 1});
+                const loginWindow = window.open(res.data.oauthUrl);
+                loginWindow.focus();
+
+                // axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+                // //クッキーに1日間セット
+                // jsCookie.set(AuthorizationTokenCookieName, token, {expires: 1});
 
                 dispatch(successLogin());
             })

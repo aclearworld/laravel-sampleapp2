@@ -11,6 +11,9 @@
 |
 */
 
+Route::post('/login', 'AuthController@login');
+Route::get('/login/twitter/callback', 'AuthController@twitterCallback');
+
 Route::get('/{any}', function () {
     return view('welcome');
 })->where('any', '.*');

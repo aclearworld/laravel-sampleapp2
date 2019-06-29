@@ -11,7 +11,7 @@ export const loginApi = () => {
         email: 'admin@example.com',
         password: 'password',
     };
-    return axios.post('/api/login', mockUser);
+    return axios.post('/login', mockUser);
 };
 
 /**
