@@ -6,24 +6,14 @@ import thunk from 'redux-thunk';
 import {Provider} from 'react-redux';
 import rootReducer from "./reducers/index";
 import jsCookie from 'js-cookie';
-import {AuthorizationHeaderName, AuthorizationTokenCookieName} from "./consts";
+import {AuthorizationHeaderName, AuthorizationTokenCookieName, AuthUrlParamName} from "./consts";
 import './index.css'
 import axios from "axios";
 
-//twitter認証のためにやむを得ず実装 起動時にurlが /login/twitter/callback であれば、強制的に書き換える
-if (window.location.pathname === '/login/twitter/callback') {
-    const heads = document.head.children;
-    let token = '';
-    for (let i = 0; i < heads.length; i++) {
-        const name = heads[i].getAttribute('name');
-        if (name === 'AuthorizationToken') {
-            token = heads[i].getAttribute('content');
-        }
-    }
-
-    jsCookie.set(AuthorizationTokenCookieName, token, {expires: 365});
-    window.location = '/';
-}
+//twitter認証のためにやむを得ず実装
+// urlパラムにAuthTokenがあれば、クッキ－にセット
+const urlParamtoken = getParameterByName(AuthUrlParamName);
+if (urlParamtoken) jsCookie.set(AuthorizationTokenCookieName, urlParamtoken, {expires: 365});
 
 //クッキーにjwtトークンが格納されていればaxiosのヘッダーにセット
 const token = jsCookie.get(AuthorizationTokenCookieName);
@@ -42,4 +32,20 @@ if (document.getElementById('root')) {
             <Application/>
         </Provider>,
         document.getElementById('root'));
+}
+
+
+/**
+ *  urlパラム取得
+ * @param name string urlパラム名
+ * @returns {string|null} value
+ */
+function getParameterByName(name) {
+    const url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }

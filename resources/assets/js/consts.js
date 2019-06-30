@@ -5,3 +5,5 @@ export const errorTypes = {
 
 export const AuthorizationTokenCookieName = 'AuthorizationToken';
 export const AuthorizationHeaderName = 'Authorization';
+export const AuthUrlParamName = 'AuthToken';
+

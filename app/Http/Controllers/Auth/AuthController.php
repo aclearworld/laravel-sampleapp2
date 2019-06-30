@@ -72,8 +72,9 @@ class  AuthController extends Controller
 
         //jwtトークン取得
         $token = auth('api')->fromUser($user);
-        //トップ画面に遷移　metaタグにトークンを設定し、js側でcookieにぶち込む
-        return view('welcome', ['token' => $token]);
+        //トップ画面に遷移　トークンはjs側でcookieにぶち込む
+        return redirect('/?AuthToken=' . $token);
+//        return view('welcome', ['token' => $token]);
     }
 
     protected function respondWithToken($token)
