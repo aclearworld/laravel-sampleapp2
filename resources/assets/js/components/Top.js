@@ -11,6 +11,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import NavigateNext from '@material-ui/icons/NavigateNext'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import {commonStyle} from "./commonStyle";
+import {UserInfo} from "./UserInfo";
 
 const styles = theme => ({
     root: commonStyle.root,
@@ -35,9 +36,10 @@ class Top extends Component {
     }
 
     componentDidMount() {
-        const {getReports, getCustomers} = this.props;
+        const {getUser, getReports, getCustomers} = this.props;
         getReports();
         getCustomers();
+        getUser();
     }
 
     handleCustomerListButtonClick(e) {
@@ -64,13 +66,8 @@ class Top extends Component {
         logout();
     }
 
-    handleGetUserInfoButtonClick(e) {
-        const {getUser} = this.props;
-        getUser();
-    }
-
     render() {
-        const {classes, displayItems} = this.props;
+        const {classes, displayItems, user} = this.props;
 
         return (
             <div className={classes.root}>
@@ -79,6 +76,7 @@ class Top extends Component {
                         <Typography variant="h5" color="inherit" className={classes.grow}>
                             訪問記録一覧
                         </Typography>
+                        <UserInfo userIconUrl={user.profile_image_url} userName={user.name}/>
                         <Button onClick={e => this.handleLoginButtonClick(e)}
                                 variant="contained" color="secondary"
                                 className={classes.button}>
@@ -88,11 +86,6 @@ class Top extends Component {
                                 variant="contained" color="secondary"
                                 className={classes.button}>
                             ログアウト
-                        </Button>
-                        <Button onClick={e => this.handleGetUserInfoButtonClick(e)}
-                                variant="contained" color="secondary"
-                                className={classes.button}>
-                            ユーザ情報取得
                         </Button>
                     </Toolbar>
                 </AppBar>

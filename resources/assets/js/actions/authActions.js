@@ -23,7 +23,19 @@ const successGetUser = user => {
     console.log(`id:${user.created_at}`);
     return {
         type: actionTypes.SUCCESS_GET_USER,
-        payload: user,
+        payload: {user: user},
+    };
+};
+
+const failedGetUser = () => {
+    const anonymousUser = {
+        id: null,
+        name: null,
+        profile_image_url: null
+    };
+    return {
+        type: actionTypes.FAILED_GET_USER,
+        payload: {anonymousUser: anonymousUser},
     };
 };
 
@@ -62,6 +74,7 @@ export const getUser = () => {
                 dispatch(successGetUser(res.data));
             })
             .catch(err => {
+                dispatch(failedGetUser());
                 console.error('caught error', err.stack);
             })
     };

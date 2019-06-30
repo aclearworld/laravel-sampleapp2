@@ -60,21 +60,22 @@ class  AuthController extends Controller
         );
         $twitter_user_info = $twitter_user->get('account/verify_credentials');
         $user = User::where('auth_id_str', $twitter_user_info->id_str)->first();
+        Log::debug($twitter_user_info->profile_image_url);
+
         if (!$user) {
             $user = User::create([
                 'name' => $twitter_user_info->name,
                 'auth_id_str' => $twitter_user_info->id_str,
+                'profile_image_url' => $twitter_user_info->profile_image_url,
             ]);
         }
 
         //認証させる
         auth()->login($user, true);
-
         //jwtトークン取得
         $token = auth('api')->fromUser($user);
         //トップ画面に遷移　トークンはjs側でcookieにぶち込む
         return redirect('/?AuthToken=' . $token);
-//        return view('welcome', ['token' => $token]);
     }
 
     protected function respondWithToken($token)

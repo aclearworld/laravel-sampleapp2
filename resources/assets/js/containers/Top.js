@@ -4,9 +4,11 @@ import {getUser, login, logout} from "../actions/authActions";
 import Top from "../components/Top";
 
 const mapStateToProps = state => {
-    const displayItems = [];
     const reports = state.reports;
     const customers = state.customers;
+    const user = state.user;
+
+    const displayItems = [];
 
     if (reports.length !== 0 && customers.length !== 0) {
         displayItems.push([]);
@@ -31,6 +33,7 @@ const mapStateToProps = state => {
 
     return {
         displayItems: displayItems,
+        user: user,
     };
 };
 

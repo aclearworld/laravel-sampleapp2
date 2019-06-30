@@ -11,4 +11,5 @@ export const actionTypes = {
     LOGIN: 'LOGIN',
     LOGOUT: 'LOGOUT',
     SUCCESS_GET_USER: 'SUCCESS_GET_USER',
+    FAILED_GET_USER: 'FAILED_GET_USER',
 };
