@@ -13,7 +13,10 @@ import axios from "axios";
 //twitter認証のためにやむを得ず実装
 // urlパラムにAuthTokenがあれば、クッキ－にセット
 const urlParamtoken = getParameterByName(AuthUrlParamName);
-if (urlParamtoken) jsCookie.set(AuthorizationTokenCookieName, urlParamtoken, {expires: 365});
+if (urlParamtoken) {
+    jsCookie.set(AuthorizationTokenCookieName, urlParamtoken, {expires: 365});
+    window.location = '/';
+}
 
 //クッキーにjwtトークンが格納されていればaxiosのヘッダーにセット
 const token = jsCookie.get(AuthorizationTokenCookieName);
